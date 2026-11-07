@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>波动与光题库 · 中英对照练习</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body class="lang1">
+<div class="home">
+  <div class="hero">
+    <h1>波动与光题库 · 中英对照练习</h1>
+    <p>香港 DSE 物理（波动、光与声）第三册 3A/3B 题库，共 705 题：选择题、短答题、长答题与阅读题全收录，含参考答案与评分要点。
+       每道题都配了中文译文和点击即查的词汇注释，可以按「中文优先 → 中英对照 → 关键词 → 全英文」四级难度慢慢过渡。</p>
+    <div class="kpis">
+      <div class="kpi"><b id="kpi-total">0</b><span>题目总数</span></div>
+      <div class="kpi"><b id="kpi-done">0</b><span>已练习</span></div>
+      <div class="kpi"><b id="kpi-ok">0</b><span>标记会做</span></div>
+      <div class="kpi"><b id="kpi-wb">0</b><span>生词本</span></div>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="panel">
+    <h2>阅读难度：四级过渡</h2>
+    <p>同一道题，四种看法。建议从第 1–2 章的「中文优先」开始，习惯后逐步切到「中英对照」「关键词」，最后用「全英文」自测。</p>
+    <div class="lvdesc">
+      <div class="lvrow"><b>中文优先</b><span>中文译文用大字显示，英文变灰色小字——先弄懂题意，再看英文怎么表达。</span></div>
+      <div class="lvrow"><b>中英对照</b><span>英文正常大小，下方给出逐句中文——最适合积累物理词汇。</span></div>
+      <div class="lvrow"><b>关键词</b><span>只保留英文，但生词后面自动跟一个中文小标签，读不下去就瞄一眼。</span></div>
+      <div class="lvrow"><b>全英文</b><span>纯英文阅读。生词鼠标悬停或点击可查中文，练的是真实考试状态。</span></div>
+    </div>
+    <div class="toolrow">
+      <button class="btn primary" id="random">随机抽一道题</button>
+      <a class="btn" href="vocab.html">打开词汇表 / 生词本</a>
+      <button class="btn" id="reset">清空练习记录</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>怎么用</h2>
+    <div class="howto">
+      <div><b>① 先读题、后看译文</b><span>每题右上角有「查看答案」。建议先自己读英文做一遍，再展开译文和答案对照。</span></div>
+      <div><b>② 点词查中文</b><span>正文里带虚线下划线的都是生词，鼠标悬停看释义，点击即可收进生词本。</span></div>
+      <div><b>③ 记一笔进度</b><span>做完一道题点「我会做 / 还不会」，左侧题目列表会变绿或变红，进度自动保存在本机。</span></div>
+      <div><b>④ 键盘更快</b><span>按 ← → 切换上一题、下一题，按 A 显示或收起答案。</span></div>
+    </div>
+  </div>
+</div>
+<script src="assets/glossary.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/chapters.js"></script>
+<script src="assets/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第 4 章. 波动（一）：波的传播与图像 · 波动与光题库</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body class="lang1">
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <a class="brand" href="index.html" style="color:inherit"><span class="dot"></span>
+        <div>波动与光题库<small>DSE Physics · Waves, Light &amp; Sound</small></div></a>
+    </div>
+    <div class="sb-search"><span class="ico">搜索</span><input id="sbsearch" placeholder="在本章题目中查找…"></div>
+    <div class="filters">
+      <a class="chip" href="index.html">← 目录</a>
+      <a class="chip" href="vocab.html">词汇表</a>
+    </div>
+    <div class="filters">
+      <button class="chip on" data-only="all">全部</button>
+      <button class="chip" data-only="todo">未做</button>
+      <button class="chip" data-only="star">收藏</button>
+      <button class="chip" data-only="fail">做错</button>
+    </div>
+    <div class="qlist" id="qlist"></div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <button class="btn ghost sm" id="sbtoggle">☰</button>
+      <div class="ttl"><span id="ptitle"></span> <span class="cn" id="langmeta"></span></div>
+      <select id="typeselect" class="btn"></select>
+      <div class="seg">
+        <button data-lang="0">中文优先</button><button data-lang="1">中英对照</button>
+        <button data-lang="2">关键词</button><button data-lang="3">全英文</button>
+      </div>
+      <div class="navbtns">
+        <a class="btn sm" id="chprev">上一章</a>
+        <button class="btn sm" id="prev">上一题</button>
+        <span class="badge lv" id="pcount"></span>
+        <button class="btn sm" id="next">下一题</button>
+        <a class="btn sm" id="chnext">下一章</a>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+<script src="assets/glossary.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/chapters.js"></script>
+<script src="assets/data/ch04.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

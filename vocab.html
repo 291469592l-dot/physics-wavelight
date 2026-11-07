@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>词汇表 · 波动与光题库</title>
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 14px;font-size:13.5px;color:var(--ink2)}
+.tabs button.on{background:var(--accent-soft);border-color:#c2d6fb;color:#1d4ed8;font-weight:600}
+.cfilters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.cfilters button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-size:12.5px;color:var(--ink2)}
+.cfilters button.on{background:var(--teal-soft);border-color:#bfe6e1;color:#0f766e;font-weight:600}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.vcard{background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.vcard .vw{font-family:var(--en);font-size:15.5px;font-weight:600;color:var(--ink);display:flex;align-items:baseline;gap:7px}
+.vcard .vw i{font-style:normal;font-size:11.5px;color:var(--ink3);font-family:var(--zh)}
+.vcard .vw em{font-style:normal;font-size:10.5px;color:#7e8b98;background:#f2f5f8;border-radius:4px;padding:1px 5px;margin-left:auto}
+.vcard .vz{font-size:14px;color:var(--teal);margin-top:3px}
+.wbg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.wcard{background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;display:flex;flex-direction:column;gap:2px}
+.wcard b{font-family:var(--en);font-size:15.5px}
+.wcard span{color:var(--teal);font-size:14px}
+.wcard i{font-style:normal;color:var(--ink3);font-size:11.5px}
+.vtop{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.vtop input{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-family:var(--zh);outline:none}
+.vtop input:focus{border-color:#b9cdf5}
+#vcount{font-size:12.5px;color:var(--ink3)}
+</style>
+</head>
+<body class="lang2">
+<div class="home">
+  <div class="hero" style="margin-bottom:22px">
+    <h1 style="font-size:24px">词汇表 · 生词本</h1>
+    <p>波动与光题库里出现频率最高的一批词：物理术语、题干常考的指令词（find / explain / suggest…）和常用学术词。</p>
+  </div>
+  <div class="tabs">
+    <button class="on" data-tab="all">全部词汇</button>
+    <button data-tab="wb">我的生词本</button>
+    <a class="btn sm" href="index.html">← 返回目录</a>
+  </div>
+  <div class="vtop">
+    <input id="vsearch" placeholder="搜索英文或中文，例如 velocity / 位移">
+    <span id="vcount"></span>
+  </div>
+  <div class="cfilters">
+    <button class="on" data-cat="all">全部</button>
+    <button data-cat="term">物理术语</button>
+    <button data-cat="cmd">题干指令词</button>
+    <button data-cat="common">常用词</button>
+    <button data-cat="basic">基础词</button>
+  </div>
+  <div id="vlist"></div>
+</div>
+<script src="assets/glossary.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/vocab.js"></script>
+</body>
+</html>
