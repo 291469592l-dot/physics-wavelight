@@ -49,20 +49,32 @@
     return h;
   }
 
+  // 把 OMML 线性化留下的 ^ / _ 记号转成真正的上下标（含撇号）
+  function supify(html){
+    html = html.replace(/\^\(([^()]*)\)/g, '<sup>($1)</sup>');
+    html = html.replace(/\^[\u0027\u2018\u2019\u2032]/g, '\u2032');
+    html = html.replace(/\^\{([^{}]*)\}/g, '<sup>$1</sup>');
+    html = html.replace(/\^([A-Za-z0-9+\-\u2013\u2212\u00b0\u2032\u2033.]+)/g, '<sup>$1</sup>');
+    html = html.replace(/_([A-Za-z0-9+\-\u2013\u2212]+)/g, '<sub>$1</sub>');
+    html = html.replace(/<sup><\/sup>/g, '');
+    return html;
+  }
+
   function renderItems(items){
     var out = '';
     for (var i=0;i<items.length;i++){
       var it = items[i];
+      if (it.t === 'math'){ out += flattenMath(it.v); continue; }
       if (it.t === 'i'){
         if (!it.src) continue;
         var w = it.w ? Math.round(it.w) : 0, h = it.h ? Math.round(it.h) : 0;
-        var inline = (h && h <= 62) || (h && h <= 96 && w && w / Math.max(h, 1) > 3);
+        var inline = (h && h <= 100) || (h && h <= 130 && w && w / Math.max(h, 1) > 2.2);
         var cls = inline ? 'eq' : 'fig';
         out += '<img class="' + cls + '" src="' + esc(it.src) + '"' +
-               (w ? ' width="' + w + '"' : '') + ' alt="" loading="lazy">';
+               (cls === 'fig' && w ? ' width="' + w + '"' : '') + ' alt="" loading="lazy">';
         continue;
       }
-      var body = (it.t === 'm') ? fmtMath(it.v) : MB.gloss(it.v);
+      var body = (it.t === 'm') ? supify(fmtMath(it.v)) : supify(MB.gloss(it.v));
       if (it.sup) body = '<sup>' + body + '</sup>';
       else if (it.sub) body = '<sub>' + body + '</sub>';
       if (it.i) body = '<i>' + body + '</i>';
@@ -73,9 +85,82 @@
     return out;
   }
 
+  // 公式行（几乎没有中文/文字）不再重复显示中文，避免二次噪声
+
+  // ---------- 分式显示方式（上下 / 斜杠） ----------
+  MB.fracInline = (MB.setting('frac') !== 'stack');
+  function splitTopMath(inner){
+    var i = 0, depth = 0, firstEnd = -1;
+    while (i < inner.length){
+      if (inner.substr(i, 3) === '</m'){
+        var e = inner.indexOf('>', i);
+        if (e < 0) break;
+        depth--; i = e + 1;
+        if (depth <= 0 && firstEnd < 0){ firstEnd = i; break; }
+        continue;
+      }
+      if (inner[i] === '<' && inner.substr(i, 2) === '<m'){
+        var e2 = inner.indexOf('>', i);
+        if (e2 < 0) break;
+        depth++; i = e2 + 1; continue;
+      }
+      i++;
+    }
+    if (firstEnd <= 0) return null;
+    return [inner.slice(0, firstEnd), inner.slice(firstEnd)];
+  }
+  function flattenMath(html){
+    if (!MB.fracInline || !html || html.indexOf('<mfrac') < 0) return html;
+    try {
+      var box = document.createElement('div');
+      box.innerHTML = html;
+      var fracs = Array.prototype.slice.call(box.querySelectorAll('mfrac'));
+      var NS = 'http://www.w3.org/1998/Math/MathML';
+      for (var i = 0; i < fracs.length; i++){
+        var fr = fracs[i];
+        var kids = [];
+        for (var j = 0; j < fr.childNodes.length; j++){
+          if (fr.childNodes[j].nodeType === 1) kids.push(fr.childNodes[j]);
+        }
+        if (kids.length !== 2 || !fr.parentNode) continue;
+        var row = box.ownerDocument.createElementNS(NS, 'mrow');
+        row.appendChild(kids[0]);
+        var slash = box.ownerDocument.createElementNS(NS, 'mo');
+        slash.appendChild(box.ownerDocument.createTextNode('/'));
+        row.appendChild(slash);
+        row.appendChild(kids[1]);
+        fr.parentNode.replaceChild(row, fr);
+      }
+      return box.innerHTML;
+    } catch (e) {
+      return html;
+    }
+  }
+
+  function applyFrac(){
+    var all = document.querySelectorAll('#fracbtn');
+    for (var i = 1; i < all.length; i++) all[i].remove();
+    document.body.classList.toggle('inlinefrac', MB.fracInline);
+    var b = document.getElementById('fracbtn');
+    if (b) b.textContent = MB.fracInline ? '分式：斜杠' : '分式：上下';
+  }
+
+  function mathDominated(p){
+    var z = (p && p.zh) || '';
+    var cjk = (z.match(/[\u4e00-\u9fff]/g) || []).length;
+    if (cjk === 0) return true;                 // 纯公式/符号译文，没有信息量
+    if (cjk / Math.max(1, z.length) < 0.18) return true;   // 基本是公式，中文只是零星两字
+    return false;
+  }
+
   function zhLine(p){
     if (!p || !p.zh) return '';
-    return '<div class="zh">' + esc(p.zh) + '</div>';
+    var t = p.zh.trim();
+    if (!/[A-Za-z0-9\u4e00-\u9fff]/.test(t)) return '';
+    if (mathDominated(p)) return '';
+    var zz = (p.zh || '').replace(/=\s*=/g, '=').replace(/[=+\-−×÷]\s*$/, '').trim();
+    if (!zz) return '';
+    return '<div class="zh">' + supify(fmtMath(zz)) + '</div>';
   }
 
   function tableInfo(t){
@@ -95,7 +180,7 @@
     c.paras.forEach(function(p){
       if (!(p.text || '').trim() && !(p.items||[]).some(function(i){ return i.t==='i'; })) return;
       out += '<div class="pc">' + renderItems(p.items || []) + '</div>';
-      if (p.zh) out += '<div class="zh">' + esc(p.zh) + '</div>';
+      out += zhLine(p);
     });
     c.tbl.forEach(function(t){ out += renderTable(t, !!sol); });
     return out;
@@ -398,6 +483,17 @@
   // ---------------- 启动 ----------------
   function boot(){
     MB.applyLang(st.lang);
+    applyFrac();
+    var _fb = document.createElement('button');
+    _fb.className = 'btn sm'; _fb.id = 'fracbtn'; _fb.type = 'button';
+    _fb.addEventListener('click', function(){
+      MB.fracInline = !MB.fracInline;
+      MB.setting('frac', MB.fracInline ? 'inline' : 'stack');
+      applyFrac(); render();
+    });
+    var _nb = document.querySelector('.navbtns');
+    if (_nb) _nb.insertBefore(_fb, _nb.firstChild);
+    applyFrac();
     document.getElementById('typeselect').innerHTML =
       ORDER.filter(function(t){ return (CH.questions[t]||[]).length; })
         .map(function(t){ return '<option value="' + t + '">' + TNAME[t] + ' (' + CH.questions[t].length + ')</option>'; }).join('');
@@ -409,6 +505,17 @@
         st.lang = parseInt(b.getAttribute('data-lang'), 10);
         MB.setting('lang', st.lang);
         MB.applyLang(st.lang);
+    applyFrac();
+    var _fb = document.createElement('button');
+    _fb.className = 'btn sm'; _fb.id = 'fracbtn'; _fb.type = 'button';
+    _fb.addEventListener('click', function(){
+      MB.fracInline = !MB.fracInline;
+      MB.setting('frac', MB.fracInline ? 'inline' : 'stack');
+      applyFrac(); render();
+    });
+    var _nb = document.querySelector('.navbtns');
+    if (_nb) _nb.insertBefore(_fb, _nb.firstChild);
+    applyFrac();
         updateNav();
       });
     });

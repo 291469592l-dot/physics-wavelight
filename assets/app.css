@@ -264,3 +264,62 @@ img.eq{margin:0 2px}
   padding:9px 16px;border-radius:10px;font-size:13.5px;opacity:0;transition:.18s;pointer-events:none;z-index:120;
   box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+/* ---------- 参考答案排版优化 ---------- */
+.ans{padding:14px 16px}
+.ans .pc{margin:0 0 5px;line-height:1.85;font-size:15px}
+.ans .pc:last-child{margin-bottom:0}
+.ans img.eq{vertical-align:-0.32em;margin:0 1px;max-height:2.9em;width:auto}
+.ans img.fig{display:block;margin:8px auto;max-width:min(100%,520px)}
+.ans .pc:has(> img:only-child){text-align:center;margin:7px 0}
+.ans .zh{font-size:14px;line-height:1.7;margin:3px 0 9px;padding:6px 10px}
+.tbl.sol td{padding:9px 12px;vertical-align:top}
+.tbl.sol td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums;color:#8b98a6}
+.ans .tbl.sol td{padding:6px 10px}
+img.eq{vertical-align:-0.28em;max-height:3.2em;width:auto}
+
+/* ---------- 参考答案排版优化 v2 ---------- */
+.tbl.sol{border-collapse:collapse;border:0}
+.tbl.sol td{border:0;border-bottom:1px solid #e9eef3;padding:9px 12px;vertical-align:top}
+.tbl.sol tr:last-child td{border-bottom:0}
+.tbl.sol td:nth-child(2){width:72px;min-width:72px;text-align:right;font-size:12.5px;
+  color:#93a1af;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.ans{background:#fcfdfe;border:1px solid #e6ecf2;border-radius:10px;padding:12px 14px}
+.ans .pc{margin:0 0 4px;line-height:1.95;font-size:15px}
+.ans .pc:last-child{margin-bottom:0}
+.ans img.eq{vertical-align:-0.34em;margin:0 2px;max-height:3.4em;width:auto}
+.ans img.fig{display:block;margin:8px auto;max-width:min(100%,520px)}
+.ans .pc:has(> img:only-child){text-align:center;margin:8px 0}
+.ans .zh{font-size:13.5px;line-height:1.7;margin:2px 0 6px;padding:5px 10px;background:#f7f9fc;
+  border-left:2px solid #d6e2f0;color:#43596e;border-radius:0 6px 6px 0}
+.solrows{display:block}
+
+/* ---------- MathML 公式排版 ---------- */
+math{font-family:"Cambria Math","Latin Modern Math","STIX Two Math","Times New Roman",serif;
+  font-size:1.06em;line-height:1;vertical-align:-0.08em;margin:0 .06em}
+math mi,math mn,math mo{margin:0 .02em}
+math mi{font-style:italic}
+math mi[mathvariant="normal"]{font-style:normal}
+math mfrac{margin:0 .16em;vertical-align:-0.1em}
+math msqrt{margin:0 .1em}
+math msup>*,math msub>*{font-size:.78em}
+.ans math{font-size:1.04em}
+.para math{vertical-align:-0.12em}
+
+/* ---------- 解答行距 / 分式高度收紧 v3 ---------- */
+.ans .pc{margin:0 0 2px;line-height:1.45;font-size:15px}
+.ans .pc + .pc{margin-top:0}
+.ans .zh{margin:1px 0 5px;padding:4px 9px;line-height:1.6}
+.frac{font-size:.78em;vertical-align:-0.38em;margin:0 .1em}
+.frac .num,.frac .den{padding:0 .15em}
+.ans .frac{font-size:.76em}
+math{font-size:1.02em;line-height:1.15;vertical-align:-0.06em}
+math mfrac{margin:0 .12em}
+.tbl.sol td{padding:6px 12px}
+.ans{padding:10px 14px}
+
+/* ---------- 分式样式切换：斜杠（单行） ---------- */
+body.inlinefrac .frac{display:inline-flex;flex-direction:row;align-items:baseline;
+  vertical-align:baseline;font-size:1em;margin:0 .04em}
+body.inlinefrac .frac .num{border-bottom:0;padding:0}
+body.inlinefrac .frac .num::after{content:"/";margin:0 .05em;color:#7b8794}
+body.inlinefrac .frac .den{padding:0}
